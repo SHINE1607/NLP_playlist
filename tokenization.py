@@ -1,5 +1,16 @@
 import nltk 
-nltk.download()
+
+#stemming
+from nltk.stem  import PorterStemmer
+from nltk.corpus import stopwords
+
+#lemmatizing
+from nltk.stem import WordNetLemmatizer
+from nltk.corpus import stopwords
+
+#bag of words 
+
+
 
 paragraph = """“In life, we’ve seen, within this part of the 
 world, great people, like Al-Khawarizmi who invented algorithm. 
@@ -45,8 +56,59 @@ things that people find inspiring and make life worth living."""
 #tokenizing the sentneces 
 sentences = nltk.sent_tokenize(paragraph)
 
-# tokenizing words 
+############# tokenizing words #############
 words = nltk.word_tokenize(paragraph)
+
+############# stemming #############
+stemmer = PorterStemmer()
+# stop words doesnt add values to sentiments of the sentences
+# stemming
+problem with stemming : most of the stemmed words doesnt make sense
+sentences_stemmed, sentences_lemmatized = [""] * len(sentences), [""] *  len(sentences)
+for i in range(len(sentences)):
+    words = nltk.word_tokenize(sentences[i]), 
+    words = [stemmer.stem(word) for word in words if word not in set(stopwords.words("english"))]
+    
+    sentences_stemmed[i] = " ".join(words)
+
+############# lemmatizing #############
+lemmatizer = WordNetLemmatizer()
+
+#lammatizing 
+for i in range(len(sentences)):
+    words = nltk.word_tokenize(sentences[i])
+    words = [lemmatizer.lemmatize(word) for word in words if word not in set(stopwords.words('english'))]
+    sentences_lemmatized[i] = ' '.join(words)      
+    
+############# Bag of words #############
+
+#cleaning of text 
+import re #re = > regular expression
+corpus = []     #for storingsentnces aftre cleaning 
+for i in range(len(sentences)):
+    review = re.sub("[a-z^A-Z]", " ", sentences[i])   #removing special character from the sentences
+    review = review.lower()     #lowering all the characters
+    review = review.split()  #sentence => list of words 
+    review  =  [lemmatizer.lemmatize(word) for word in review if word not in set(stopwords.words("english"))]
+    corpus.append(review)   #cleaned sentences as list of words 
+    
+#creating bag of words model 
+from sklearn.feature_extraction.text import CountVectorizer
+cv = CountVectorizer(max_features = 1500)
+X = cv.fit_transform(corpus).toarray()
+    
+    
+
+
+
+
+
+
+
+
+
+
+
 
 
 
